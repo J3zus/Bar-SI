@@ -31,9 +31,13 @@ def index():
 
     return render_template('Bebidas/index.html', bebidas=bebidas)
 
-@app.route('/create')
-def create():
+@app.route('/createbebidas')
+def createbebidas():
     return render_template('Bebidas/create.html')
+
+@app.route('/createbotanas')
+def createbotanas():
+    return render_template('botana/create.html')
 
 @app.route('/store', methods=['POST'])
 def storage():
