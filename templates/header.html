@@ -33,15 +33,15 @@
           <ul class="navbar-nav">
 
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{ url_for('create')}}">Almacen</a>
+              <a class="nav-link active" aria-current="page" href="{{ url_for('create')}}">Añadir bebidas</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{ url_for('create')}}">Reservaciones</a>
+              <a class="nav-link active" aria-current="page" href="#">Reservaciones</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{ url_for('create')}}">Personal</a>
+              <a class="nav-link active" aria-current="page" href="#">Personal</a>
             </li>
 
           </ul>
@@ -70,7 +70,7 @@
         window.onload=function(){startTime();}
 
         var d = new Date();
-        document.write('Fecha: '+d.getDate(),'&nbsp;&nbsp;&nbsp; Dia de la semana: '+d.getDay(),'&nbsp;&nbsp;&nbsp; Mes (0 al 11): '+d.getMonth(),'&nbsp;&nbsp;&nbsp; Año: '+d.getFullYear());
+        document.write('<br>Fecha: '+d.getDate(),'&nbsp;&nbsp;&nbsp; Dia de la semana: '+d.getDay(),'&nbsp;&nbsp;&nbsp; Mes (0 al 11): '+d.getMonth(),'&nbsp;&nbsp;&nbsp; Año: '+d.getFullYear());
       </script>
         
       <div id="reloj" style="font-size:80px;"></div>      

@@ -1,31 +1,37 @@
     {% include 'header.html' %}
 
+    <hr>
     <br>
-    <h1>Tabla de personas ingresadas</h1>
+    <h1>Bebidas</h1>
     <br>
-    <a class="btn btn-success" href="{{url_for('create') }}"> Create </a>
-    <br><br>
+    <br>
     <table class="table table-light">
         <thead class="thead-light">
             <tr>
                 <th>#</th>
                 <th>Foto</th>
                 <th>Nombre</th>
-                <th>Correo</th>
+                <th>Descripcion</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            {% for registro in empleados %}
+            {% for registro in bebidas %}
             <tr>
                 <td> {{ registro[0] }}</td>
 
                 <td>
-                    <img class="img-thumbnail" width="100" src="{{url_for('uploads', nombreFoto=registro[3]) }}">
+                    <img class="img-thumbnail" width="100" src="{{url_for('uploads', nombreFoto=registro[6]) }}">
                 </td>
 
                 <td> {{ registro[1] }}</td>
                 <td> {{ registro[2] }}</td>
+                <td> {{ registro[3] }}</td>
+                <td> {{ registro[4] }}</td>
+                <td> {{ registro[5] }}</td>
                 <td>
                     <a class="btn btn-outline-primary" href="/edit/{{registro[0]}}" >Editar</a>
                     |

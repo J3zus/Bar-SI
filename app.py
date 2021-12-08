@@ -11,7 +11,7 @@ mysql = MySQL()
 app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
-app.config['MYSQL_DATABASE_DB'] = 'clasepython'
+app.config['MYSQL_DATABASE_DB'] = 'si'
 mysql.init_app(app)
 
 CARPETA = os.path.join('uploads')
@@ -19,36 +19,40 @@ app.config['CARPETA']= CARPETA
 
 @app.route('/')
 def index():
-    sql = "SELECT * FROM `empleados`;"
+    sql = "SELECT * FROM `bebidas`;"
     conn = mysql.connect()
     cursor = conn.cursor()
     cursor.execute(sql)
 
-    empleados = cursor.fetchall()
+    bebidas = cursor.fetchall()
 
     conn.commit()
+    
 
-    return render_template('empleados/index.html', empleados=empleados)
+    return render_template('Bebidas/index.html', bebidas=bebidas)
 
 @app.route('/create')
 def create():
-    return render_template('empleados/create.html')
+    return render_template('Bebidas/create.html')
 
 @app.route('/store', methods=['POST'])
 def storage():
     _nombre = request.form['txtNombre']
-    _correo = request.form['txtCorreo']
-    _foto = request.files['txtFoto']
+    _descripcion = request.form['txtdescripcion']
+    _tipo = request.form['listtipo']
+    _cantidad = request.form['txtcantidad']
+    _precio = request.form['txtprecio']
+    _imagen = request.files['txtFoto']
 
     now = datetime.now()
     tiempo = now.strftime("%Y%H%M%S")
 
-    if _foto.filename != '':
-        nuevoNombre = tiempo + _foto.filename
-        _foto.save("uploads/"+nuevoNombre)
+    if _imagen.filename != '':
+        nuevoNombre = tiempo + _imagen.filename
+        _imagen.save("uploads/"+nuevoNombre)
 
-    sql = "insert into `empleados` (`id`, `nombre`, `correo`, `foto`) VALUES(NULL, %s, %s, %s);"
-    datos = (_nombre, _correo, nuevoNombre)
+    sql = "insert into `bebidas` (`Id`, `Nombre`, `Descripcion`, `Tipo`, `Cantidad`, `Precio`, `Imagen`) VALUES(NULL, %s, %s, %s, %s, %s, %s);"
+    datos = (_nombre, _descripcion,_tipo,_cantidad,_precio, nuevoNombre)
     conn = mysql.connect()
     cursor = conn.cursor()
     cursor.execute(sql, datos)
@@ -60,11 +64,11 @@ def destroy(id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT foto FROM empleados WHERE id=%s", (id))
+    cursor.execute("SELECT Imagen FROM bebidas WHERE id=%s", (id))
     fila = cursor.fetchall()
     os.remove(os.path.join(app.config['CARPETA'], fila[0][0]))
 
-    cursor.execute("DELETE FROM empleados WHERE id=%s", (id))
+    cursor.execute("DELETE FROM bebidas WHERE id=%s", (id))
     conn.commit()
     return redirect('/')
 
@@ -73,21 +77,25 @@ def edit(id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM empleados WHERE id=%s", (id))
-    empleados = cursor.fetchall()
+    cursor.execute("SELECT * FROM bebidas WHERE id=%s", (id))
+    bebidas = cursor.fetchall()
     conn.commit()
-    return render_template('empleados/edit.html', empleados=empleados)
+    return render_template('bebidas/edit.html', bebidas=bebidas)
 
 @app.route('/update', methods=['POST'])
 def update():
     _nombre = request.form['txtNombre']
-    _correo = request.form['txtCorreo']
+    _descripcion = request.form['txtdescripcion']
+    _tipo = request.form['listtipo']
+    _cantidad = request.form['txtcantidad']
+    _precio = request.form['txtprecio']
+
     _foto = request.files['txtFoto']
     id = request.form['txtID']
 
-    sql = "UPDATE empleados SET nombre=%s, correo=%s WHERE id=%s;"
+    sql = "UPDATE bebidas SET Nombre=%s, Descripcion=%s, Tipo=%s, Cantidad=%s, Precio=%s WHERE Id=%s;"
 
-    datos = (_nombre, _correo, id)
+    datos = (_nombre, _descripcion, _tipo, _cantidad, _precio, id)
 
     conn = mysql.connect()
     cursor = conn.cursor()
@@ -100,11 +108,11 @@ def update():
     if _foto.filename !='':
         nuevoNombre = hora + _foto.filename
         _foto.save('uploads/'+nuevoNombre)
-        cursor.execute("SELECT foto FROM empleados WHERE id=%s", id)
+        cursor.execute("SELECT Imagen FROM bebidas WHERE Id=%s", id)
         fila = cursor.fetchall()
 
         os.remove(os.path.join(app.config['CARPETA'], fila[0][0]))
-        cursor.execute("UPDATE empleados SET foto=%s WHERE id=%s", (nuevoNombre, id))
+        cursor.execute("UPDATE bebidas SET Imagen=%s WHERE Id=%s", (nuevoNombre, id))
         conn.commit()
 
     return redirect('/')
