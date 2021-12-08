@@ -44,6 +44,10 @@
               <a class="nav-link active" aria-current="page" href="{{ url_for('indexre')}}">Reservaciones</a>
             </li>
 
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" target="_blank" rel="noopener noreferrer" href="{{ url_for('indexme')}}">Reservaciones</a>
+            </li>
+
           </ul>
         </div>
 
@@ -53,26 +57,6 @@
     </nav>
   </header>
 
-    <div class="container">
-
-      <script type="text/javascript">
-        function startTime(){
-        today=new Date();
-        h=today.getHours();
-        m=today.getMinutes();
-        s=today.getSeconds();
-        m=checkTime(m);
-        s=checkTime(s);
-        document.getElementById('reloj').innerHTML=h+":"+m+":"+s;
-        t=setTimeout('startTime()',500);}
-        function checkTime(i)
-        {if (i<10) {i="0" + i;}return i;}
-        window.onload=function(){startTime();}
-
-        var d = new Date();
-        document.write('<br>Fecha: '+d.getDate(),'&nbsp;&nbsp;&nbsp; Dia de la semana: '+d.getDay(),'&nbsp;&nbsp;&nbsp; Mes (0 al 11): '+d.getMonth(),'&nbsp;&nbsp;&nbsp; Año: '+d.getFullYear());
-      </script>
-        
-      <div id="reloj" style="font-size:80px;"></div>      
+    <div class="container">     
 
         <br>

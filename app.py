@@ -19,7 +19,13 @@ app.config['CARPETA']= CARPETA
 
 @app.route('/')
 def index():
-    return render_template('Bebidas/index.html')
+    return render_template('index.html')
+
+
+@app.route('/indexme')
+def indexme():
+    return render_template('Menu.html')
+
 
 @app.route('/indexbe')
 def indexbe():
