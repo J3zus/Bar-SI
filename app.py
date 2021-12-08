@@ -30,15 +30,24 @@ def index():
 
     sql2 = "SELECT * FROM `botana`;"
     conn2 = mysql.connect()
-    cursor2 = conn.cursor()
+    cursor2 = conn2.cursor()
     cursor2.execute(sql2)
 
     botanas = cursor2.fetchall()
 
     conn2.commit()
+
+    sql3 = "SELECT * FROM `reservaciones`;"
+    conn3 = mysql.connect()
+    cursor3 = conn3.cursor()
+    cursor3.execute(sql3)
+
+    reservaciones = cursor3.fetchall()
+
+    conn3.commit()
     
 
-    return render_template('Bebidas/index.html', bebidas=bebidas, botanas=botanas)
+    return render_template('Bebidas/index.html', bebidas=bebidas, botanas=botanas, reservaciones=reservaciones)
 
 @app.route('/createbebidas')
 def createbebidas():
@@ -47,6 +56,10 @@ def createbebidas():
 @app.route('/createbotanas')
 def createbotanas():
     return render_template('botana/create.html')
+
+@app.route('/createreservacion')
+def createreservacion():
+    return render_template('Reservaciones/create.html')
 
 @app.route('/store', methods=['POST'])
 def storage():
@@ -88,6 +101,22 @@ def storage2():
 
     sql = "insert into `botana` (`Id`, `Nombre`, `Descripcion`, `Precio`, `Imagen`) VALUES(NULL, %s, %s, %s, %s);"
     datos = (_nombre, _descripcion,_precio, nuevoNombre)
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute(sql, datos)
+    conn.commit()
+    return redirect('/')
+
+@app.route('/store3', methods=['POST'])
+def storage3():
+    _nombre = request.form['txtNombre']
+    _mesa = request.form['txtMesa']
+    _precio = request.form['txtprecio']
+    _fecha = request.form['txtFecha']
+    _Hora = request.form['txtHora']
+
+    sql = "insert into `reservaciones` (`Id`, `Nombre`, `Mesa`, `Fecha`, `Hora`, `Precio`) VALUES(NULL, %s, %s, %s, %s, %s);"
+    datos = (_nombre, _mesa,_fecha, _Hora, _precio)
     conn = mysql.connect()
     cursor = conn.cursor()
     cursor.execute(sql, datos)
@@ -139,6 +168,16 @@ def editbotana(id):
     botanas = cursor.fetchall()
     conn.commit()
     return render_template('botana/edit.html', botanas=botanas)
+
+@app.route('/editreservaciones/<int:id>')
+def editreservaciones(id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM reservaciones WHERE Id=%s", (id))
+    reservaciones = cursor.fetchall()
+    conn.commit()
+    return render_template('Reservaciones/edit.html', reservaciones=reservaciones)
 
 @app.route('/update', methods=['POST'])
 def update():
