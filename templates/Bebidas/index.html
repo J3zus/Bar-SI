@@ -1,76 +1,12 @@
     {% include 'header.html' %}
 
-    <!-----------------------------------------            RESERVACIONES         --------------------------------------------->
-
-    <hr>
-    <br>
-    <h1>Reservaciones</h1>
-    <br>
-    <br>
-    <table class="table table-dark table-sm">
-        <thead class="thead-light">
-            <tr>
-                <th>#</th>
-                <th>Nombre</th>
-                <th>Mesa</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for registro in reservaciones %}
-            <tr>
-                <td> {{ registro[0] }}</td>
-
-                <td> {{ registro[1] }}</td>
-                <td> {{ registro[2] }}</td>
-                <td> {{ registro[3] }}</td>
-                <td> {{ registro[4] }}</td>
-                <td> {{ registro[5] }}</td>
-                <td>
-                    <a class="btn btn-outline-primary" href="/editreservaciones/{{registro[0]}}" >Editar</a>
-                    |
-                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal3">Eliminar</button>
-
-                    <!----modal starts here--->
-                        <div id="deleteModal3" class="modal fade" role='dialog'>
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Eliminar registro </h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Seguro que quieres eliminar este registro?</p>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form action="/destroyreservacion/{{registro[0]}}">
-                                            <input type="submit" class="btn btn-danger" value="Eliminar Usuario">
-                                        </form>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <span id= 'deleteButton'></span>
-                                    </div>
-
-                                </div>
-                              </div>
-                          </div>
-                        <!--Modal ends here--->
-
-                </td>
-
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-
     <!-----------------------------------------            BEBIDAS         ------------------------------------->
 
     <hr>
     <br>
     <h1>Bebidas</h1>
+    <br>
+    <a class="btn btn-success" href="{{url_for('createbebidas') }}"> Añadir </a>
     <br>
     <br>
     <table class="table table-primary">
@@ -136,71 +72,4 @@
         </tbody>
     </table>
 
-    <!-----------------------------------------            BOTANAS         ------------------------------------->
-
-    <hr>
-    <br>
-    <h1>Botanas</h1>
-    <br>
-    <br>
-    <table class="table table-secondary">
-        <thead class="thead-light">
-            <tr>
-                <th>#</th>
-                <th>Foto</th>
-                <th>Nombre</th>
-                <th>Descripcion</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for registro in botanas %}
-            <tr>
-                <td> {{ registro[0] }}</td>
-
-                <td>
-                    <img class="img-thumbnail" width="100" src="{{url_for('uploads', nombreFoto=registro[4]) }}">
-                </td>
-
-                <td> {{ registro[1] }}</td>
-                <td> {{ registro[3] }}</td>
-                <td> {{ registro[2] }}</td>
-                <td>
-                    <a class="btn btn-outline-primary" href="/editbotana/{{registro[0]}}" >Editar</a>
-                    |
-                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal2">Eliminar</button>
-
-                    <!----modal starts here--->
-                        <div id="deleteModal2" class="modal fade" role='dialog'>
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Eliminar registro </h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Seguro que quieres eliminar este registro?</p>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form action="/destroybotana/{{registro[0]}}">
-                                            <input type="submit" class="btn btn-danger" value="Eliminar Usuario">
-                                        </form>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <span id= 'deleteButton'></span>
-                                    </div>
-
-                                </div>
-                              </div>
-                          </div>
-                        <!--Modal ends here--->
-
-                </td>
-
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-
-    {% include 'footer.html' %}
+{% include 'footer.html' %}

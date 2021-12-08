@@ -2,7 +2,7 @@
 
 {% for item in reservaciones %}
 
-<form method="post" action="/updatebotana" enctype="multipart/form-data">
+<form method="post" action="/updatereservacion" enctype="multipart/form-data">
     <div class="card-header">
         Modificar reservacion
     </div>
@@ -28,15 +28,29 @@
             <br>
 
             <div class="form-group">
-                <label for="txtdescripcion">Descripcion:</label>
-                 <input class="form-control" type="text" value="{{item[3]}}"name="txtdescripcion" id="txtdescripcion">
+                <label for="txtMesa">Mesa:</label>
+                 <input class="form-control" type="number" value="{{item[2]}}"name="txtMesa" id="txtMesa">
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="txtFecha">Fecha:</label>
+                <input class="form-control" type="date" value="{{item[3]}}"name="txtFecha" id="txtFecha" required>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="txtHora">Hora:</label>
+                <input class="form-control" type="time" value="{{item[4]}}"name="txtHora" id="txtHora" required>
             </div>
 
             <br>
 
             <div class="form-group">
                 <label for="txtprecio">Precio ($):</label>
-                 <input class="form-control" type="number" value="{{item[2]}}"name="txtprecio" id="txtprecio" required>
+                 <input class="form-control" type="number" value="{{item[5]}}"name="txtprecio" id="txtprecio" required>
             </div>
 
             <br>

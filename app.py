@@ -19,6 +19,11 @@ app.config['CARPETA']= CARPETA
 
 @app.route('/')
 def index():
+    return render_template('Bebidas/index.html')
+
+@app.route('/indexbe')
+def indexbe():
+
     sql = "SELECT * FROM `bebidas`;"
     conn = mysql.connect()
     cursor = conn.cursor()
@@ -27,6 +32,10 @@ def index():
     bebidas = cursor.fetchall()
 
     conn.commit()
+    return render_template('Bebidas/index.html', bebidas=bebidas)
+
+@app.route('/indexbo')
+def indexbo():
 
     sql2 = "SELECT * FROM `botana`;"
     conn2 = mysql.connect()
@@ -37,6 +46,11 @@ def index():
 
     conn2.commit()
 
+    return render_template('botana/index.html', botanas=botanas)
+
+@app.route('/indexre')
+def indexre():
+
     sql3 = "SELECT * FROM `reservaciones`;"
     conn3 = mysql.connect()
     cursor3 = conn3.cursor()
@@ -45,9 +59,10 @@ def index():
     reservaciones = cursor3.fetchall()
 
     conn3.commit()
-    
+    return render_template('Reservaciones/index.html', reservaciones=reservaciones)
 
-    return render_template('Bebidas/index.html', bebidas=bebidas, botanas=botanas, reservaciones=reservaciones)
+
+
 
 @app.route('/createbebidas')
 def createbebidas():
@@ -83,13 +98,14 @@ def storage():
     cursor = conn.cursor()
     cursor.execute(sql, datos)
     conn.commit()
-    return redirect('/')
+    return redirect('/indexbe')
 
 @app.route('/store2', methods=['POST'])
 def storage2():
     _nombre = request.form['txtNombre']
     _descripcion = request.form['txtdescripcion']
     _precio = request.form['txtprecio']
+    _cantidad = request.form['txtcantidad']
     _imagen = request.files['txtFoto']
 
     now = datetime.now()
@@ -99,13 +115,13 @@ def storage2():
         nuevoNombre = tiempo + _imagen.filename
         _imagen.save("uploads/"+nuevoNombre)
 
-    sql = "insert into `botana` (`Id`, `Nombre`, `Descripcion`, `Precio`, `Imagen`) VALUES(NULL, %s, %s, %s, %s);"
-    datos = (_nombre, _descripcion,_precio, nuevoNombre)
+    sql = "insert into `botana` (`Id`, `Nombre`, `Descripcion`, `Cantidad`, `Precio`, `Imagen`) VALUES(NULL, %s, %s, %s, %s, %s);"
+    datos = (_nombre, _descripcion, _cantidad, _precio, nuevoNombre)
     conn = mysql.connect()
     cursor = conn.cursor()
     cursor.execute(sql, datos)
     conn.commit()
-    return redirect('/')
+    return redirect('/indexbo')
 
 @app.route('/store3', methods=['POST'])
 def storage3():
@@ -121,7 +137,7 @@ def storage3():
     cursor = conn.cursor()
     cursor.execute(sql, datos)
     conn.commit()
-    return redirect('/')
+    return redirect('/indexre')
 
 @app.route('/destroybebidas/<int:id>')
 def destroybebidas(id):
@@ -134,7 +150,7 @@ def destroybebidas(id):
 
     cursor.execute("DELETE FROM bebidas WHERE id=%s", (id))
     conn.commit()
-    return redirect('/')
+    return redirect('/indexbe')
 
 @app.route('/destroybotana/<int:id>')
 def destroybotana(id):
@@ -147,7 +163,17 @@ def destroybotana(id):
 
     cursor.execute("DELETE FROM botana WHERE Id=%s", (id))
     conn.commit()
-    return redirect('/')
+    return redirect('/indexbo')
+
+
+@app.route('/destroyreservacion/<int:id>')
+def destroyreservacion(id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM reservaciones WHERE Id=%s", (id))
+    conn.commit()
+    return redirect('/indexre')
 
 @app.route('/editbebidas/<int:id>')
 def editbebidas(id):
@@ -212,7 +238,7 @@ def update():
         cursor.execute("UPDATE bebidas SET Imagen=%s WHERE Id=%s", (nuevoNombre, id))
         conn.commit()
 
-    return redirect('/')
+    return redirect('/indexbe')
 
 @app.route('/updatebotana', methods=['POST'])
 def updatebotana():
@@ -245,7 +271,29 @@ def updatebotana():
         cursor.execute("UPDATE botana SET Imagen=%s WHERE Id=%s", (nuevoNombre, id))
         conn.commit()
 
-    return redirect('/')
+    return redirect('/indexbo')
+
+
+@app.route('/updatereservacion', methods=['POST'])
+def updatereservacion():
+    _nombre = request.form['txtNombre']
+    _mesa = request.form['txtMesa']
+    _Fecha = request.form['txtFecha']
+    _Hora = request.form['txtHora']
+    _precio = request.form['txtprecio']
+    id = request.form['txtID']
+
+    sql = "UPDATE reservaciones SET Nombre=%s, Mesa=%s, Fecha=%s, Hora=%s, Precio=%s WHERE Id=%s;"
+
+    datos = (_nombre, _mesa, _Fecha, _Hora, _precio,id)
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute(sql, datos)
+    conn.commit()
+
+    return redirect('/indexre')
+
 
 @app.route('/uploads/<nombreFoto>')
 def uploads(nombreFoto):

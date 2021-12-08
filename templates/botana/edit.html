@@ -35,6 +35,13 @@
             <br>
 
             <div class="form-group">
+                <label for="txtcantidad">Cantidad:</label>
+                 <input class="form-control" type="number" value="{{item[4]}}"name="txtcantidad" id="txtcantidad" required>
+            </div>
+
+            <br>
+
+            <div class="form-group">
                 <label for="txtprecio">Precio ($):</label>
                  <input class="form-control" type="number" value="{{item[2]}}"name="txtprecio" id="txtprecio" required>
             </div>
@@ -44,7 +51,7 @@
             <div class="form-group">
                 <label for="txtFoto">Foto:</label>
                 <br>
-                <img class="img-thumbnail" width="100" src="{{url_for('uploads', nombreFoto=item[4]) }}">
+                <img class="img-thumbnail" width="100" src="{{url_for('uploads', nombreFoto=item[5]) }}">
                 <br><br>
                 <input class="form-control" type="file" name="txtFoto" id="txtFoto">
             </div>
