@@ -1,0 +1,65 @@
+{% include 'header.html' %}
+
+{% for item in botanas %}
+
+<form method="post" action="/updatebotana" enctype="multipart/form-data">
+    <div class="card-header">
+        Modificar botana
+    </div>
+
+    <div class="card-body">
+        <div class="card-title text-center">
+            Datos de la botana
+        </div>
+        <div class="card-text">
+
+            <div class="form-group">
+                <label>Numero de identificacion:</label>
+                <input type="text" value="{{ item[0] }}" name="txtID" id="txtID" readonly>
+            </div>
+
+            <br><hr>
+
+            <div class="form-group">
+                <label for="txtNombre">Nombre:</label>
+                <input class="form-control" type="text" value="{{ item[1] }}" name="txtNombre" id="txtNombre">
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="txtdescripcion">Descripcion:</label>
+                 <input class="form-control" type="text" value="{{item[3]}}"name="txtdescripcion" id="txtdescripcion">
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="txtprecio">Precio ($):</label>
+                 <input class="form-control" type="number" value="{{item[2]}}"name="txtprecio" id="txtprecio" required>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="txtFoto">Foto:</label>
+                <br>
+                <img class="img-thumbnail" width="100" src="{{url_for('uploads', nombreFoto=item[4]) }}">
+                <br><br>
+                <input class="form-control" type="file" name="txtFoto" id="txtFoto">
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <input type="submit" value="Actualizar" class="btn btn-success">
+                |
+                <a href="{{ url_for('index') }}" class="btn btn-warning">Regresar</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endfor %}
+
+{% include 'footer.html' %}

@@ -27,9 +27,18 @@ def index():
     bebidas = cursor.fetchall()
 
     conn.commit()
+
+    sql2 = "SELECT * FROM `botana`;"
+    conn2 = mysql.connect()
+    cursor2 = conn.cursor()
+    cursor2.execute(sql2)
+
+    botanas = cursor2.fetchall()
+
+    conn2.commit()
     
 
-    return render_template('Bebidas/index.html', bebidas=bebidas)
+    return render_template('Bebidas/index.html', bebidas=bebidas, botanas=botanas)
 
 @app.route('/createbebidas')
 def createbebidas():
@@ -63,12 +72,34 @@ def storage():
     conn.commit()
     return redirect('/')
 
-@app.route('/destroy/<int:id>')
-def destroy(id):
+@app.route('/store2', methods=['POST'])
+def storage2():
+    _nombre = request.form['txtNombre']
+    _descripcion = request.form['txtdescripcion']
+    _precio = request.form['txtprecio']
+    _imagen = request.files['txtFoto']
+
+    now = datetime.now()
+    tiempo = now.strftime("%Y%H%M%S")
+
+    if _imagen.filename != '':
+        nuevoNombre = tiempo + _imagen.filename
+        _imagen.save("uploads/"+nuevoNombre)
+
+    sql = "insert into `botana` (`Id`, `Nombre`, `Descripcion`, `Precio`, `Imagen`) VALUES(NULL, %s, %s, %s, %s);"
+    datos = (_nombre, _descripcion,_precio, nuevoNombre)
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute(sql, datos)
+    conn.commit()
+    return redirect('/')
+
+@app.route('/destroybebidas/<int:id>')
+def destroybebidas(id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT Imagen FROM bebidas WHERE id=%s", (id))
+    cursor.execute("SELECT Imagen FROM bebidas WHERE Id=%s", (id))
     fila = cursor.fetchall()
     os.remove(os.path.join(app.config['CARPETA'], fila[0][0]))
 
@@ -76,8 +107,21 @@ def destroy(id):
     conn.commit()
     return redirect('/')
 
-@app.route('/edit/<int:id>')
-def edit(id):
+@app.route('/destroybotana/<int:id>')
+def destroybotana(id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT Imagen FROM botana WHERE Id=%s", (id))
+    fila = cursor.fetchall()
+    os.remove(os.path.join(app.config['CARPETA'], fila[0][0]))
+
+    cursor.execute("DELETE FROM botana WHERE Id=%s", (id))
+    conn.commit()
+    return redirect('/')
+
+@app.route('/editbebidas/<int:id>')
+def editbebidas(id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
@@ -85,6 +129,16 @@ def edit(id):
     bebidas = cursor.fetchall()
     conn.commit()
     return render_template('bebidas/edit.html', bebidas=bebidas)
+
+@app.route('/editbotana/<int:id>')
+def editbotana(id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM botana WHERE Id=%s", (id))
+    botanas = cursor.fetchall()
+    conn.commit()
+    return render_template('botana/edit.html', botanas=botanas)
 
 @app.route('/update', methods=['POST'])
 def update():
@@ -117,6 +171,39 @@ def update():
 
         os.remove(os.path.join(app.config['CARPETA'], fila[0][0]))
         cursor.execute("UPDATE bebidas SET Imagen=%s WHERE Id=%s", (nuevoNombre, id))
+        conn.commit()
+
+    return redirect('/')
+
+@app.route('/updatebotana', methods=['POST'])
+def updatebotana():
+    _nombre = request.form['txtNombre']
+    _descripcion = request.form['txtdescripcion']
+    _precio = request.form['txtprecio']
+
+    _foto = request.files['txtFoto']
+    id = request.form['txtID']
+
+    sql = "UPDATE botana SET Nombre=%s, Precio=%s, Descripcion=%s WHERE Id=%s;"
+
+    datos = (_nombre, _precio, _descripcion, id)
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute(sql, datos)
+    conn.commit()
+
+    now = datetime.now()
+    hora = now.strftime("%Y%H%M%S")
+
+    if _foto.filename !='':
+        nuevoNombre = hora + _foto.filename
+        _foto.save('uploads/'+nuevoNombre)
+        cursor.execute("SELECT Imagen FROM botana WHERE Id=%s", id)
+        fila = cursor.fetchall()
+
+        os.remove(os.path.join(app.config['CARPETA'], fila[0][0]))
+        cursor.execute("UPDATE botana SET Imagen=%s WHERE Id=%s", (nuevoNombre, id))
         conn.commit()
 
     return redirect('/')
